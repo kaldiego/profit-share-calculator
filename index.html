@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Seed Carry Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f4f6fa;
+    }
+    h2 {
+      color: #003366;
+    }
+    label {
+      font-weight: bold;
+    }
+    input {
+      width: 200px;
+      padding: 6px;
+      margin-bottom: 12px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #007bff;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result-box {
+      background: white;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      width: 500px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+<h2>Seed Investor Carry Calculator</h2>
+
+<label>Your Investment ($):</label><br>
+<input id="investment" type="number" value="100000"><br>
+
+<label>Total Fund Profit ($):</label><br>
+<input id="profit" type="number" value="3000000"><br>
+
+<label>Carry % (default 20):</label><br>
+<input id="carry" type="number" value="20"><br>
+
+<label>Seed Share of Carry % (default 25):</label><br>
+<input id="seedCarry" type="number" value="25"><br>
+
+<button onclick="calculate()">Calculate</button>
+
+<div id="results" class="result-box"></div>
+
+<script>
+function calculate() {
+  const I = parseFloat(document.getElementById("investment").value);
+  const S = 10000000; // FIXED SEED ROUND
+  const P = parseFloat(document.getElementById("profit").value);
+  const C = parseFloat(document.getElementById("carry").value) / 100;
+  const SC = parseFloat(document.getElementById("seedCarry").value) / 100;
+
+  const ownership = I / S;
+  const gpCarry = P * C;
+  const seedCarryPool = gpCarry * SC;
+  const yourCarryShare = seedCarryPool * ownership;
+
+  document.getElementById("results").innerHTML = `
+    <h3>Results</h3>
+    <p><strong>Your Carry Profit:</strong> $${yourCarryShare.toLocaleString()}</p>
+  `;
+}
+</script>
+
+</body>
+</html>
