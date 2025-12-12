@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Seed Carry Calculator</title>
+  <title>Full Hedge Fund Economics Calculator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -36,14 +36,14 @@
       padding: 20px;
       margin-top: 20px;
       border-radius: 8px;
-      width: 500px;
+      width: 600px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
 
-<h2>Seed Investor Carry Calculator</h2>
+<h2>Full Seed Investor Economics Calculator</h2>
 
 <label>Your Investment ($):</label><br>
 <input id="investment" type="number" value="100000"><br>
@@ -70,13 +70,36 @@ function calculate() {
   const SC = parseFloat(document.getElementById("seedCarry").value) / 100;
 
   const ownership = I / S;
+
+  // LP profit before carry fees
+  const lpProfit = ownership * P;
+
+  // Carry you pay
+  const carryPaid = lpProfit * C;
+
+  // GP total carry
   const gpCarry = P * C;
+
+  // Seed investor pool share of GP carry
   const seedCarryPool = gpCarry * SC;
-  const yourCarryShare = seedCarryPool * ownership;
+
+  // Your rebate from seed share
+  const carryRebate = seedCarryPool * ownership;
+
+  // Net profit after fees + rebate
+  const netProfit = lpProfit - carryPaid + carryRebate;
+
+  // Effective carry percentage
+  const effectiveCarryRate = (carryPaid - carryRebate) / lpProfit * 100;
 
   document.getElementById("results").innerHTML = `
     <h3>Results</h3>
-    <p><strong>Your Carry Profit:</strong> $${yourCarryShare.toLocaleString()}</p>
+    <p><strong>LP Profit (Before Fees):</strong> $${lpProfit.toLocaleString()}</p>
+    <p><strong>Carry You Pay (20% fee):</strong> -$${carryPaid.toLocaleString()}</p>
+    <p><strong>Seed Carry Rebate Returned to You:</strong> +$${carryRebate.toLocaleString()}</p>
+    <hr>
+    <p><strong>Net Profit to You:</strong> $${netProfit.toLocaleString()}</p>
+    <p><strong>Your Effective Carry Rate:</strong> ${effectiveCarryRate.toFixed(2)}%</p>
   `;
 }
 </script>
